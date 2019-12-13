@@ -52,6 +52,7 @@ WHERE name = '삼성'
 
 > PostgreSQL 같은 경우는 JSON 필드 내부 중 일부만 수정할 수 없으며 기존 JSON 데이터를 가공하여 만든 데이터를 저장하는 방식입니다.  
 > 그래서 위에서 SELECT한 구문의 결과를 employees 필드에 새로 입력하는 방식입니다.
+
 ```sql
 -- UPDATE 쿼리에 적용
 
@@ -97,6 +98,7 @@ FROM   company;
 >
 > JSON_AGG는 나눠진 데이터를 하나의 JSON Array로 만들어줍니다.
 > 결과적으로는 JSON Array를 분해하여 "홍길동2"라는 사람의 데이터를 제외하고 다시 합치는 방식입니다.
+
 ```sql
 SELECT id, JSON_AGG(employees) as employees
 FROM (
@@ -113,7 +115,8 @@ GROUP BY id;
 |3    |[{"age": "40", "name": "스티브1"}, {"age": "41", "name": "스티브2"}, {"age": "42", "name": "스티브3"}]         |
 
 
-> 위와 같은 SELECT 문을 WITH 구문으로 정의하여 기존 employees를 대체하게 됩니다.
+> 위와 같은 SELECT 문을 WITH 구문으로 정의하여 기존 employees를 대체하게 됩니다.  
+
 ```sql
 --데이터 갱신
 WITH t as (SELECT id, JSON_AGG(employees) as employees
@@ -154,7 +157,8 @@ WHERE t.employee->>'name' = '스티브3'
 
 > JSONB_SET은 JSONB_SET은(target jsonb, path text[], new_value jsonb [, create_missing boolean]) 와 같은 형식을 가집니다.  
 > employees에서 해당 경로에대한 결과를 "스티브잡스"로 변경하는 역할을 합니다.  
-> 변경된 값을 같은 id값을 가진 employees를 대체합니다.
+> 변경된 값을 같은 id값을 가진 employees를 대체합니다.   
+
 ```sql
 --데이터 갱신
 WITH t AS (
